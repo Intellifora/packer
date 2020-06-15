@@ -1,7 +1,6 @@
 package communicator
 
 import (
-	"os"
 	"reflect"
 	"testing"
 
