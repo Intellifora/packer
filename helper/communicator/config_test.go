@@ -150,6 +150,30 @@ func TestConfig_winrm(t *testing.T) {
 	}
 }
 
+func TestConfig_winrm_no_proxy(t *testing.T) {
+	old := os.Getenv("NO_PROXY")
+	defer func() {
+		os.Setenv("NO_PROXY", old)
+	}()
+
+	c := &Config{
+		Type: "winrm",
+		WinRM: WinRM{
+			WinRMUser:    "admin",
+			WinRMPort:    5510,
+			WinRMNoProxy: true,
+		},
+	}
+	if err := c.Prepare(testContext(t)); len(err) > 0 {
+		t.Fatalf("bad: %#v", err)
+	}
+
+	noProxy := os.Getenv("NO_PROXY")
+	if noProxy != "*" {
+		t.Errorf(`expected "WinRMNoProxy=true" to set the NO_PROXY env to "*", but it got %q`, noProxy)
+	}
+}
+
 func testContext(t *testing.T) *interpolate.Context {
 	return nil
 }

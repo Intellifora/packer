@@ -29,6 +29,16 @@ func TestStepConnect_none(t *testing.T) {
 	}
 }
 
+var noProxyTests = []struct {
+	current  string
+	expected string
+}{
+	{"", "foo:1"},
+	{"foo:1", "foo:1"},
+	{"foo:1,bar:2", "foo:1,bar:2"},
+	{"bar:2", "bar:2,foo:1"},
+}
+
 func testState(t *testing.T) multistep.StateBag {
 	state := new(multistep.BasicStateBag)
 	state.Put("hook", &packer.MockHook{})
